@@ -1,109 +1,74 @@
+/**
+ * BMI Calculator Module
+ * Calculates BMI and determines health category
+ */
+
 class BMICalculator {
-    constructor() {
-        this.weightInput = document.getElementById('weight');
-        this.heightInput = document.getElementById('height');
-        this.calculateBtn = document.getElementById('calculate-btn');
-        this.resultDiv = document.getElementById('result');
-        this.bmiValue = document.getElementById('bmi-value');
-        this.category = document.getElementById('category');
-        this.categoryInfo = document.getElementById('category-info');
-        
-        this.initializeEventListeners();
-    }
-    
-    initializeEventListeners() {
-        this.calculateBtn.addEventListener('click', () => this.calculateBMI());
-        
-        // Allow Enter key to trigger calculation
-        [this.weightInput, this.heightInput].forEach(input => {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    this.calculateBMI();
-                }
-            });
-        });
-    }
-    
-    calculateBMI() {
-        const weight = parseFloat(this.weightInput.value);
-        const height = parseFloat(this.heightInput.value) / 100; // Convert cm to meters
-        
-        // Validate inputs
-        if (!this.validateInputs(weight, height)) {
-            return;
+    /**
+     * Calculate BMI based on weight and height
+     * @param {number} weight - Weight in kilograms
+     * @param {number} height - Height in meters
+     * @returns {number} BMI value
+     */
+    static calculateBMI(weight, height) {
+        if (weight <= 0 || height <= 0) {
+            throw new Error('Weight and height must be positive numbers');
         }
-        
-        // Calculate BMI
-        const bmi = weight / (height * height);
-        const roundedBMI = Math.round(bmi * 10) / 10;
-        
-        // Get category and info
-        const categoryData = this.getBMICategory(roundedBMI);
-        
-        // Display results
-        this.displayResults(roundedBMI, categoryData);
+        return weight / (height * height);
     }
-    
-    validateInputs(weight, height) {
-        if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
-            alert('Please enter valid positive numbers for weight and height.');
-            return false;
-        }
-        return true;
-    }
-    
-    getBMICategory(bmi) {
+
+    /**
+     * Classify BMI into health categories
+     * @param {number} bmi - BMI value
+     * @returns {Object} Category information
+     */
+    static classifyBMI(bmi) {
         const categories = {
-            underweight: { 
-                range: [0, 18.4], 
-                message: 'You may be underweight. Consider consulting a healthcare provider for nutritional advice.',
-                color: 'underweight'
-            },
-            normal: { 
-                range: [18.5, 24.9], 
-                message: 'Great! You are in the healthy weight range. Maintain your current lifestyle.',
-                color: 'normal'
-            },
-            overweight: { 
-                range: [25, 29.9], 
-                message: 'You may be overweight. Consider incorporating more physical activity and balanced nutrition.',
-                color: 'overweight'
-            },
-            obese: { 
-                range: [30, Infinity], 
-                message: 'You may be obese. It is recommended to consult with a healthcare provider for guidance.',
-                color: 'obese'
-            }
+            underweight: { min: 0, max: 18.4, message: 'Underweight' },
+            normal: { min: 18.5, max: 24.9, message: 'Normal weight' },
+            overweight: { min: 25, max: 29.9, message: 'Overweight' },
+            obese1: { min: 30, max: 34.9, message: 'Obese (Class I)' },
+            obese2: { min: 35, max: 39.9, message: 'Obese (Class II)' },
+            obese3: { min: 40, max: Infinity, message: 'Obese (Class III)' }
         };
-        
-        for (const [category, data] of Object.entries(categories)) {
-            if (bmi >= data.range[0] && bmi <= data.range[1]) {
-                return { category, ...data };
+
+        for (const [key, category] of Object.entries(categories)) {
+            if (bmi >= category.min && bmi <= category.max) {
+                return {
+                    category: key,
+                    message: category.message,
+                    bmi: bmi
+                };
             }
         }
-        
-        return categories.underweight; // Fallback
+
+        return {
+            category: 'unknown',
+            message: 'Unable to classify',
+            bmi: bmi
+        };
     }
-    
-    displayResults(bmi, categoryData) {
-        this.bmiValue.textContent = bmi;
-        this.category.textContent = categoryData.category;
-        this.categoryInfo.textContent = categoryData.message;
+
+    /**
+     * Calculate and classify BMI in one step
+     * @param {number} weight - Weight in kilograms
+     * @param {number} height - Height in meters
+     * @returns {Object} Complete BMI analysis
+     */
+    static analyze(weight, height) {
+        const bmi = this.calculateBMI(weight, height);
+        const classification = this.classifyBMI(bmi);
         
-        // Remove previous category classes
-        this.resultDiv.classList.remove('underweight', 'normal', 'overweight', 'obese');
-        // Add current category class
-        this.resultDiv.classList.add(categoryData.color);
-        
-        // Show result section
-        this.resultDiv.classList.remove('hidden');
-        
-        // Scroll to results
-        this.resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return {
+            ...classification,
+            weight: weight,
+            height: height,
+            bmi: parseFloat(bmi.toFixed(1))
+        };
     }
 }
 
-// Initialize the calculator when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    new BMICalculator();
-});
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = BMICalculator;
+}
