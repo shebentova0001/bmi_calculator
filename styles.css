@@ -1,7 +1,11 @@
+/**
+ * BMI Calculator Styles
+ */
+
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body {
@@ -27,51 +31,49 @@ h1 {
     text-align: center;
     color: #333;
     margin-bottom: 30px;
-    font-size: 2.5em;
-}
-
-.calculator {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    font-size: 2em;
 }
 
 .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    margin-bottom: 20px;
 }
 
 label {
+    display: block;
+    margin-bottom: 8px;
     font-weight: bold;
     color: #555;
-    font-size: 1.1em;
 }
 
-input {
+input[type="number"] {
+    width: 100%;
     padding: 12px;
     border: 2px solid #ddd;
     border-radius: 8px;
-    font-size: 1em;
+    font-size: 16px;
     transition: border-color 0.3s ease;
 }
 
-input:focus {
+input[type="number"]:focus {
     outline: none;
     border-color: #667eea;
 }
 
+input[type="number"].error {
+    border-color: #e74c3c;
+}
+
 button {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
     border: none;
-    padding: 15px;
     border-radius: 8px;
-    font-size: 1.1em;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s ease;
-    margin-top: 10px;
 }
 
 button:hover {
@@ -83,45 +85,82 @@ button:active {
 }
 
 .result {
-    background: #f8f9fa;
+    margin-top: 30px;
     padding: 20px;
     border-radius: 8px;
-    border-left: 4px solid #667eea;
-}
-
-.result h3 {
-    color: #333;
-    margin-bottom: 15px;
-}
-
-.result p {
-    margin: 8px 0;
-    font-size: 1.1em;
-}
-
-#bmi-value {
-    font-weight: bold;
-    font-size: 1.2em;
-}
-
-#category {
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-.category-info {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 0.9em;
-}
-
-.hidden {
+    text-align: center;
     display: none;
 }
 
-/* Category specific styles */
-.underweight { background-color: #fff3cd; border-color: #ffc107; }
-.normal { background-color: #d1edff; border-color: #007bff; }
-.overweight { background-color: #fff3cd; border-color: #ffc107; }
-.obese { background-color: #f8d7da; border-color: #dc3545; }
+.result h3 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+.bmi-value {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.category {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.message {
+    font-style: italic;
+    margin-top: 10px;
+    color: #666;
+}
+
+/* Category-based styling */
+.result.underweight {
+    background-color: #ffeaa7;
+    border: 2px solid #fdcb6e;
+}
+
+.result.normal {
+    background-color: #55efc4;
+    border: 2px solid #00b894;
+}
+
+.result.overweight {
+    background-color: #fab1a0;
+    border: 2px solid #e17055;
+}
+
+.result.obese1, .result.obese2, .result.obese3 {
+    background-color: #ff7675;
+    border: 2px solid #d63031;
+    color: white;
+}
+
+.result.obese1 .message,
+.result.obese2 .message,
+.result.obese3 .message {
+    color: #ffeaa7;
+}
+
+.reset-btn {
+    margin-top: 15px;
+    padding: 10px;
+    background: #95a5a6;
+    font-size: 14px;
+}
+
+.reset-btn:hover {
+    background: #7f8c8d;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+}
