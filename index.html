@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>BMI Calculator</h1>
+        
+        <div class="input-group">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" placeholder="Enter weight in kilograms" step="0.1" min="0">
+        </div>
+        
+        <div class="input-group">
+            <label for="height">Height (m):</label>
+            <input type="number" id="height" placeholder="Enter height in meters" step="0.01" min="0">
+        </div>
+        
+        <button id="calculate">Calculate BMI</button>
+        
+        <div id="result" class="result" style="display: none;">
+            <h3>Your Results</h3>
+            <div class="bmi-value" id="bmi-value">--</div>
+            <div class="category" id="category">--</div>
+            <div class="message" id="message">--</div>
+            <button class="reset-btn" onclick="resetCalculator()">Calculate Again</button>
+        </div>
+    </div>
+
+    <script src="bmi-calculator.js"></script>
+    <script src="bmi-ui.js"></script>
+    
+    <script>
+        // Global function to reset calculator
+        function resetCalculator() {
+            document.getElementById('weight').value = '';
+            document.getElementById('height').value = '';
+            document.getElementById('result').style.display = 'none';
+            
+            // Clear any error messages
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(msg => msg.remove());
+            
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => input.classList.remove('error'));
+        }
+    </script>
+</body>
+</html>
